@@ -56,7 +56,7 @@ def download_video(vid: YouTube, only_audio=None, output_path=None):
         best_stream.download()
     else:
         vid.streams.get_highest_resolution().download()
-    print(f"Downloaded {vid.title}")
+    print(f"Downloaded {vid.title}!")
 
 
 if __name__ == "__main__":
