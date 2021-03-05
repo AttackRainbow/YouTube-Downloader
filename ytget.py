@@ -92,5 +92,6 @@ def download_video(vid: YouTube, only_audio=None):
 
 
 if __name__ == "__main__":
+    os.system("title YouTube-Get")
     os.chdir(file_dir)
     main()
