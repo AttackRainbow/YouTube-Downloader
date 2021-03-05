@@ -3,7 +3,7 @@ Downloading YouTube videos and playlists that takes no effort. :)
 
 ## Download
 - Make sure you have python installed. ([Download here](https://www.python.org/downloads/))
-- Download a zip version [here](https://github.com/AttackRainbow/YouTube-Get/archive/main.zip)
+- Download YouTube-Get [here](https://github.com/AttackRainbow/YouTube-Get/archive/main.zip) and extract into an empty folder
 
 ## Usage
 1. Copy a YouTube link to either
