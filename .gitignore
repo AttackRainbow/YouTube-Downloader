@@ -1,3 +1,5 @@
-venv
-.vscode
-Downloaded
+*
+!.gitignore
+!README.md
+!requirements.txt
+!ytget.py
