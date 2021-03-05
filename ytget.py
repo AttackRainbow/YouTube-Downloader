@@ -68,7 +68,7 @@ def filtered_video(url: str):
     except (RegexMatchError, VideoPrivate, VideoRegionBlocked, VideoUnavailable):
         print(url)
         print(
-            f'Video id, {url.split("youtu.be/")[1] if "youtu.be/" in url else url.split("v=")[1].split("&")[0]}, is not available to download.')
+            f'Video of {url} is not available to download.')
         return None
 
 
