@@ -1,6 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 import os
 import sys
+from urllib.error import HTTPError
 
 for i in range(3):
     try:
@@ -42,25 +43,20 @@ def main():
     else:
         os.chdir(os.path.join(file_dir, downloaded_videos_folder))
 
-    try:
-        vid = filtered_video(link)
-    except RegexMatchError:
+    if "youtube.com/watch?v=" in link or "youtu.be/" in link:
+        download_video_from_url(link)
+    elif "playlist?list=" in link:
+        playlist = Playlist(link)
         try:
-            playlist = Playlist(link)
-        except RegexMatchError:
-            print("Invalid yt link. Try again later.")
-            from time import sleep
-            sleep(3)
-            exit(1)
+            print("Trying to download " + str(len(playlist.video_urls)) + " video(s).")
+        except HTTPError:  # the problem is at Playlist.video_urls
+            print("Cannot download this playlist. No idea why lol.")
         else:
-            print("Trying to download " + str(len(playlist)) + " video(s).")
             with ThreadPoolExecutor() as ex:
                 ex.map(download_video_from_url, playlist.video_urls, [
                     only_audio for _ in range(len(playlist))])
     else:
-        if not vid:  # cannot download this vid
-            exit(1)
-        download_video(vid, only_audio)
+        print("Provided link is invalid.")
 
 
 def filtered_video(url: str):
@@ -69,17 +65,20 @@ def filtered_video(url: str):
 
     try:
         return YouTube(url)
-    except (VideoPrivate, VideoRegionBlocked, VideoUnavailable):
+    except (RegexMatchError, VideoPrivate, VideoRegionBlocked, VideoUnavailable):
+        print(url)
         print(
             f'Video id, {url.split("youtu.be/")[1] if "youtu.be/" in url else url.split("v=")[1].split("&")[0]}, is not available to download.')
         return None
 
 
 def download_video_from_url(url: str, only_audio=None):
+    """ will return True if downloaded else False """
     vid = filtered_video(url)
     if not vid:
-        return
+        return False
     download_video(vid, only_audio)
+    return True
 
 
 def download_video(vid: YouTube, only_audio=None):
