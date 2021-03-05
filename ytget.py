@@ -88,7 +88,7 @@ def download_video(vid: YouTube, only_audio=None):
         best_stream.download()
     else:
         vid.streams.first().download()
-    print(f"\tDownloaded {vid.title}")
+    print(f"Downloaded {vid.title}")
 
 
 if __name__ == "__main__":
