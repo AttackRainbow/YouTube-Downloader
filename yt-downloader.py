@@ -19,17 +19,20 @@ file_path = os.path.abspath(__file__)
 file_dir = os.path.dirname(file_path)
 
 def main():
+    downloaded_videos_folder = "Downloaded Videos"
+    downloaded_audios_folder = "Downloaded Audios"
+    if not os.path.exists(downloaded_videos_folder):
+        os.makedirs(downloaded_videos_folder)
+    if not os.path.exists(downloaded_audios_folder):
+        os.makedirs(downloaded_audios_folder)
+
     link = sys.argv[1]
-    download_path = None
     only_audio = False
     if "-audio" in sys.argv:
         only_audio = True
-
-    download_folder = "Downloaded"
-    if not os.path.exists(download_folder):
-        os.makedirs(download_folder)
-
-    os.chdir(os.path.join(file_dir, download_folder))
+        os.chdir(os.path.join(file_dir, downloaded_audios_folder))
+    else:
+        os.chdir(os.path.join(file_dir, downloaded_videos_folder))
     try:
         vid = YouTube(link)
     except RegexMatchError:
