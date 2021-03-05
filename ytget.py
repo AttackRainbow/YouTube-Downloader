@@ -66,7 +66,6 @@ def filtered_video(url: str):
     try:
         return YouTube(url)
     except (RegexMatchError, VideoPrivate, VideoRegionBlocked, VideoUnavailable):
-        print(url)
         print(
             f'Video of {url} is not available to download.')
         return None
