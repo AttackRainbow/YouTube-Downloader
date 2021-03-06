@@ -29,20 +29,21 @@ def main():
     if not os.path.exists(downloaded_audios_folder):
         os.makedirs(downloaded_audios_folder)
 
-    only_audio = False
+    only_audio = True
     if len(sys.argv) == 1:
         link = input("YouTube link: ")
         only_audio = True if input(
             "Download as audio? (y,n): ").strip().lower() == "y" else False
     else:
         link = sys.argv[1]
-        if "-audio" in sys.argv:
-            only_audio = True
+        if "-vid" in sys.argv:
+            only_audio = False
 
     if only_audio:
         os.chdir(os.path.join(file_dir, downloaded_audios_folder))
     else:
         os.chdir(os.path.join(file_dir, downloaded_videos_folder))
+    print("Downloading to " + os.getcwd() + ".")
 
     if "youtube.com/watch?v=" in link or "youtu.be/" in link:
         download_video_from_url(link)
