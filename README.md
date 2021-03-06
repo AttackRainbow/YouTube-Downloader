@@ -1,5 +1,5 @@
 # YouTube-Get
-Downloading YouTube videos and playlists that takes no effort. :)
+Download YouTube videos and playlists effortlessly. :)
 
 ## Download
 - Make sure you have python installed. ([Download here](https://www.python.org/downloads/))
