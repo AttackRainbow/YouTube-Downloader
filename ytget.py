@@ -1,12 +1,13 @@
-from concurrent.futures import ThreadPoolExecutor
 import os
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from urllib.error import HTTPError
 
 for i in range(3):
     try:
-        from pytube import YouTube, Playlist
-        from pytube.exceptions import RegexMatchError, VideoUnavailable, VideoRegionBlocked, VideoPrivate
+        from pytube import Playlist, YouTube
+        from pytube.exceptions import (RegexMatchError, VideoPrivate,
+                                       VideoRegionBlocked, VideoUnavailable)
     except ImportError:
         if i == 1:
             print("Cannot install dependencies...")
