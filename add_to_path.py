@@ -3,7 +3,7 @@ import os
 file_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(file_dir)
 
-print(os.system("path > path.txt"))
+os.system("path > path.txt")
 with open("path.txt") as f:
     paths = f.read().replace("PATH=", "").replace("\n", "").split(';')
 
