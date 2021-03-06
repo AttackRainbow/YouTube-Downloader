@@ -16,3 +16,5 @@ Downloading YouTube videos and playlists that takes no effort. :)
 
 2.2 other ways will prompt for input in the terminal  
 3. Find your downloaded videos/audios in the Downloaded folders
+
+NOTE: to run ytget anywhere (no need to cd), run add_to_path.py to add the folder to path.
