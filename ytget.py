@@ -50,7 +50,8 @@ def main():
     elif "playlist?list=" in link:
         playlist = Playlist(link)
         try:
-            print("Trying to download " + str(len(playlist.video_urls)) + " video(s).")
+            print("Trying to download " +
+                  str(len(playlist.video_urls)) + " video(s).")
         except HTTPError:  # the problem is at Playlist.video_urls
             print("Cannot download this playlist. No idea why lol.")
         else:
@@ -69,7 +70,7 @@ def filtered_video(url: str):
         return YouTube(url)
     except (RegexMatchError, VideoPrivate, VideoRegionBlocked, VideoUnavailable):
         print(
-            f'Video of {url} is not available to download.')
+            f'Video of {url} is not available for download.')
         return None
 
 
