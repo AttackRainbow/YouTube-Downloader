@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor
 from urllib.error import HTTPError
@@ -18,13 +19,15 @@ for i in range(3):
     else:
         break
 
-file_path = os.path.abspath(__file__)
-file_dir = os.path.dirname(file_path)
+FILE_PATH = os.path.abspath(__file__)
+FILE_DIR = os.path.dirname(FILE_PATH)
+FILEBROWSER_PATH = os.path.join(os.getenv('WINDIR'), 'explorer.exe')
 
 
 def main():
     here = False
     only_audio = True
+    show = False
     if len(sys.argv) == 1:
         link = input("YouTube link: ")
         only_audio = True if input(
@@ -35,16 +38,18 @@ def main():
             only_audio = False
         if "-here" in sys.argv:
             here = True
+        if "-show" in sys.argv:
+            show = True
 
     # select where to put downloaded files
     downloaded_videos_folder = "Downloaded Videos"
     downloaded_audios_folder = "Downloaded Audios"
     if here:
-        os.chdir(file_dir)
+        os.chdir(FILE_DIR)
     elif only_audio:
-        os.chdir(os.path.join(file_dir, downloaded_audios_folder))
+        os.chdir(os.path.join(FILE_DIR, downloaded_audios_folder))
     else:
-        os.chdir(os.path.join(file_dir, downloaded_videos_folder))
+        os.chdir(os.path.join(FILE_DIR, downloaded_videos_folder))
 
     if not here:  # no need to make folders if download to file_dir
         if not os.path.exists(downloaded_videos_folder):
@@ -53,9 +58,11 @@ def main():
             os.makedirs(downloaded_audios_folder)
 
     # link to video/playlist or title of a video
+    downloaded = False
     if "youtube.com/watch?v=" in link or "youtu.be/" in link:
         print_where_to_download()
         download_video_from_url(link)
+        downloaded = True
     elif "playlist?list=" in link:
         playlist = Playlist(link)
         try:
@@ -68,6 +75,7 @@ def main():
                 print_where_to_download()
                 ex.map(download_video_from_url, playlist.video_urls, [
                     only_audio for _ in range(len(playlist))])
+            downloaded = True
     else:
         results = VideosSearch(link).result()['result']
         try:
@@ -76,15 +84,33 @@ def main():
                 if 'y' in input(f"{r['title']}, {r['duration']}\n(y,n)?: "):
                     print_where_to_download()
                     download_video_from_url(r['link'], only_audio=True)
+                    downloaded = True
                     break
             else:
                 print("No more result.")
         except KeyboardInterrupt:
             exit(0)
 
+    if downloaded:  # ask wether to show in file explorer
+        if show:
+            explore()
+        else:
+            if "y" in input("Show in File Explorer? (y,n): ").strip().lower():
+                explore()
+
 
 def print_where_to_download():
     print("Downloading to " + os.getcwd() + ".")
+
+
+def explore(path=os.getcwd()):
+    # explorer would choke on forward slashes
+    path = os.path.normpath(path)
+
+    if os.path.isdir(path):
+        subprocess.run([FILEBROWSER_PATH, path])
+    elif os.path.isfile(path):
+        subprocess.run([FILEBROWSER_PATH, '/select,', os.path.normpath(path)])
 
 
 def filtered_video(url: str):
@@ -120,6 +146,6 @@ def download_video(vid: YouTube, only_audio=None, highest_resolution=False):
 
 
 if __name__ == "__main__":
-    os.chdir(file_dir)
+    os.chdir(FILE_DIR)
     os.system("title YouTube-Get")
     main()
