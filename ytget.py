@@ -23,15 +23,8 @@ file_dir = os.path.dirname(file_path)
 
 
 def main():
-    downloaded_videos_folder = "Downloaded Videos"
-    downloaded_audios_folder = "Downloaded Audios"
-    if not os.path.exists(downloaded_videos_folder):
-        os.makedirs(downloaded_videos_folder)
-    if not os.path.exists(downloaded_audios_folder):
-        os.makedirs(downloaded_audios_folder)
-
-    only_audio = True
     here = False
+    only_audio = True
     if len(sys.argv) == 1:
         link = input("YouTube link: ")
         only_audio = True if input(
@@ -44,12 +37,20 @@ def main():
             here = True
 
     # select where to put downloaded files
+    downloaded_videos_folder = "Downloaded Videos"
+    downloaded_audios_folder = "Downloaded Audios"
     if here:
         os.chdir(file_dir)
     elif only_audio:
         os.chdir(os.path.join(file_dir, downloaded_audios_folder))
     else:
         os.chdir(os.path.join(file_dir, downloaded_videos_folder))
+
+    if not here:  # no need to make folders if download to file_dir
+        if not os.path.exists(downloaded_videos_folder):
+            os.makedirs(downloaded_videos_folder)
+        if not os.path.exists(downloaded_audios_folder):
+            os.makedirs(downloaded_audios_folder)
 
     # link to video/playlist or title of a video
     if "youtube.com/watch?v=" in link or "youtu.be/" in link:
@@ -119,5 +120,6 @@ def download_video(vid: YouTube, only_audio=None, highest_resolution=False):
 
 
 if __name__ == "__main__":
+    os.chdir(file_dir)
     os.system("title YouTube-Get")
     main()
