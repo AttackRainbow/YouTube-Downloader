@@ -87,11 +87,10 @@ def download_video(vid: YouTube, only_audio=None, highest_solution=False):
     if only_audio:
         best_stream = vid.streams.get_audio_only()
         best_stream.download()
-        return
-    if highest_solution:
+    elif highest_solution:
         vid.streams.get_highest_resolution().download()
-        return
-    vid.streams.first().download()
+    else:
+        vid.streams.first().download()
     print(f"Downloaded {vid.title}")
 
 
