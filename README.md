@@ -11,8 +11,8 @@ Download YouTube videos and playlists effortlessly. :)
 - a playlist https://www.youtube.com/playlist?list=<playlist_id>  
 
 2.1 run via commandline (cd to where ytget.py is first): 
-- ytget _link_ => download as audio 
-- ytget _link_ -vid => download as video  
+- ytget.py _link_ => download as audio 
+- ytget.py _link_ -vid => download as video  
 
 2.2 other ways will prompt for inputs  
 3. Find your downloaded videos/audios in the Downloaded folders  
