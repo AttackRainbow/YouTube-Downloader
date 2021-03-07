@@ -51,7 +51,7 @@ def main():
     else:
         os.chdir(os.path.join(FILE_DIR, downloaded_videos_folder))
 
-    if not here:  # no need to make folders if download to file_dir
+    if os.getcwd() == FILE_DIR:  # make folders in default folder
         if not os.path.exists(downloaded_videos_folder):
             os.makedirs(downloaded_videos_folder)
         if not os.path.exists(downloaded_audios_folder):
