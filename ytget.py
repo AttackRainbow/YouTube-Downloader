@@ -69,13 +69,17 @@ def main():
                     only_audio for _ in range(len(playlist))])
     else:
         results = VideosSearch(link).result()['result']
-        for r in results:
-            if 'y' in input(f"{r['title']}, {r['duration']}\n(y,n)?: "):
-                print_where_to_download()
-                download_video_from_url(r['link'], only_audio=True)
-                break
-        else:
-            print("No more result.")
+        try:
+            print("ctrl + c to cancel.")
+            for r in results:
+                if 'y' in input(f"{r['title']}, {r['duration']}\n(y,n)?: "):
+                    print_where_to_download()
+                    download_video_from_url(r['link'], only_audio=True)
+                    break
+            else:
+                print("No more result.")
+        except KeyboardInterrupt:
+            exit(0)
 
 
 def print_where_to_download():
