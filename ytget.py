@@ -83,7 +83,7 @@ def main():
             for r in results:
                 if 'y' in input(f"{r['title']}, {r['duration']}\n(y,n)?: "):
                     print_where_to_download()
-                    download_video_from_url(r['link'], only_audio=True)
+                    download_video_from_url(r['link'], only_audio=only_audio)
                     downloaded = True
                     break
             else:
