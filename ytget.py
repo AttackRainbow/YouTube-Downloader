@@ -74,21 +74,24 @@ def filtered_video(url: str):
         return None
 
 
-def download_video_from_url(url: str, only_audio=None):
+def download_video_from_url(url: str, only_audio=None, highest_solution=False):
     """ will return True if downloaded else False """
     vid = filtered_video(url)
     if not vid:
         return False
-    download_video(vid, only_audio)
+    download_video(vid, only_audio, highest_solution)
     return True
 
 
-def download_video(vid: YouTube, only_audio=None):
+def download_video(vid: YouTube, only_audio=None, highest_solution=False):
     if only_audio:
         best_stream = vid.streams.get_audio_only()
         best_stream.download()
-    else:
-        vid.streams.first().download()
+        return
+    if highest_solution:
+        vid.streams.get_highest_resolution().download()
+        return
+    vid.streams.first().download()
     print(f"Downloaded {vid.title}")
 
 
