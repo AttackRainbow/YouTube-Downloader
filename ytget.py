@@ -44,9 +44,9 @@ def main():
         os.chdir(os.path.join(file_dir, downloaded_audios_folder))
     else:
         os.chdir(os.path.join(file_dir, downloaded_videos_folder))
-    print("Downloading to " + os.getcwd() + ".")
 
     if "youtube.com/watch?v=" in link or "youtu.be/" in link:
+        print_where_to_download()
         download_video_from_url(link)
     elif "playlist?list=" in link:
         playlist = Playlist(link)
@@ -57,16 +57,22 @@ def main():
             print("Cannot download this playlist. No idea why lol.")
         else:
             with ThreadPoolExecutor() as ex:
+                print_where_to_download()
                 ex.map(download_video_from_url, playlist.video_urls, [
                     only_audio for _ in range(len(playlist))])
     else:
         results = VideosSearch(link).result()['result']
         for r in results:
             if 'y' in input(f"{r['title']}, {r['duration']}\n(y,n)?: "):
+                print_where_to_download()
                 download_video_from_url(r['link'], only_audio=True)
                 break
         else:
             print("No more result.")
+
+
+def print_where_to_download():
+    print("Downloading to " + os.getcwd() + ".")
 
 
 def filtered_video(url: str):
