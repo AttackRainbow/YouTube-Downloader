@@ -93,17 +93,17 @@ def main():
 
     if downloaded:  # ask wether to show in file explorer
         if show:
-            explore()
+            explore(os.getcwd())
         else:
             if "y" in input("Show in File Explorer? (y,n): ").strip().lower():
-                explore()
+                explore(os.getcwd())
 
 
 def print_where_to_download():
     print("Downloading to " + os.getcwd() + ".")
 
 
-def explore(path=os.getcwd()):
+def explore(path):
     # explorer would choke on forward slashes
     path = os.path.normpath(path)
 
