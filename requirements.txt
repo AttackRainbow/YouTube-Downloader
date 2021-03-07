@@ -3,3 +3,4 @@ pycodestyle==2.6.0
 pytube==10.5.1
 toml==0.10.2
 typing-extensions==3.7.4.3
+youtube-search-python==1.4.2
