@@ -8,6 +8,7 @@ for i in range(3):
         from pytube import Playlist, YouTube
         from pytube.exceptions import (RegexMatchError, VideoPrivate,
                                        VideoRegionBlocked, VideoUnavailable)
+        from youtubesearchpython import VideosSearch
     except ImportError:
         if i == 1:
             print("Cannot install dependencies...")
@@ -59,7 +60,13 @@ def main():
                 ex.map(download_video_from_url, playlist.video_urls, [
                     only_audio for _ in range(len(playlist))])
     else:
-        print("Provided link is invalid.")
+        results = VideosSearch(link).result()['result']
+        for r in results:
+            if 'y' in input(f"{r['title']}, {r['duration']}\n(y,n)?: "):
+                download_video_from_url(r['link'], only_audio=True)
+                break
+        else:
+            print("No more result.")
 
 
 def filtered_video(url: str):
@@ -74,20 +81,20 @@ def filtered_video(url: str):
         return None
 
 
-def download_video_from_url(url: str, only_audio=None, highest_solution=False):
+def download_video_from_url(url: str, only_audio=None, highest_resolution=False):
     """ will return True if downloaded else False """
     vid = filtered_video(url)
     if not vid:
         return False
-    download_video(vid, only_audio, highest_solution)
+    download_video(vid, only_audio, highest_resolution)
     return True
 
 
-def download_video(vid: YouTube, only_audio=None, highest_solution=False):
+def download_video(vid: YouTube, only_audio=None, highest_resolution=False):
     if only_audio:
         best_stream = vid.streams.get_audio_only()
         best_stream.download()
-    elif highest_solution:
+    elif highest_resolution:
         vid.streams.get_highest_resolution().download()
     else:
         vid.streams.first().download()
