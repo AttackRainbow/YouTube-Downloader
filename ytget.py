@@ -46,16 +46,15 @@ def main():
     downloaded_audios_folder = "Downloaded Audios"
     if here:
         os.chdir(FILE_DIR)
-    elif only_audio:
-        os.chdir(os.path.join(FILE_DIR, downloaded_audios_folder))
-    else:
-        os.chdir(os.path.join(FILE_DIR, downloaded_videos_folder))
-
-    if os.getcwd() == FILE_DIR:  # make folders in default folder
+        # check to make folders in default folder
         if not os.path.exists(downloaded_videos_folder):
             os.makedirs(downloaded_videos_folder)
         if not os.path.exists(downloaded_audios_folder):
             os.makedirs(downloaded_audios_folder)
+    elif only_audio:
+        os.chdir(os.path.join(FILE_DIR, downloaded_audios_folder))
+    else:
+        os.chdir(os.path.join(FILE_DIR, downloaded_videos_folder))
 
     # link to video/playlist or title of a video
     downloaded = False
