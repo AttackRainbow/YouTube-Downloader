@@ -2,6 +2,7 @@ import os
 import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor
+from typing import Iterable
 from urllib.error import HTTPError
 
 for i in range(3):
@@ -65,16 +66,23 @@ def main():
     elif "playlist?list=" in link:
         playlist = Playlist(link)
         try:
-            print("Trying to download " +
-                  str(len(playlist.video_urls)) + " video(s).")
-        except HTTPError:  # the problem is at Playlist.video_urls
-            print("Cannot download this playlist. No idea why lol.")
-        else:
-            with ThreadPoolExecutor() as ex:
-                print_where_to_download()
-                ex.map(download_video_from_url, playlist.video_urls, [
-                    only_audio for _ in range(len(playlist))])
-            downloaded = True
+            download_playlist_from_urls(
+                playlist.video_urls, only_audio=only_audio)
+        # the problem is at Playlist.video_urls
+        # maybe some videos are removed but still shown in playlist
+        except HTTPError:
+            # time to use good old method of parsing html lmao
+            headers = {
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/87.0.4280.66 Safari/537.36"
+            }
+            import requests
+            r = requests.get(link, headers=headers)
+            vid_ids = set([each.split('"')[0] for each in r.text.split(
+                '"videoId":"')][1:-3])  # 3 duplicates of each id
+            download_playlist_from_urls(
+                list(map(lambda id: f"https://youtu.be/{id}", vid_ids)))
+        downloaded = True
     else:
         results = VideosSearch(link).result()['result']
         try:
@@ -96,6 +104,14 @@ def main():
         else:
             if "y" in input("Show in File Explorer? (y,n): ").strip().lower():
                 explore(os.getcwd())
+
+
+def download_playlist_from_urls(urls: Iterable[str], only_audio=None, highest_resolution=False):
+    print("Downloading " + str(len(urls)) + " video(s).")
+    with ThreadPoolExecutor() as ex:
+        print_where_to_download()
+        ex.map(download_video_from_url, urls, [
+            only_audio for _ in range(len(urls))])
 
 
 def print_where_to_download():
