@@ -107,9 +107,8 @@ def main():
 
 
 def download_playlist_from_urls(urls: Iterable[str], only_audio=None, highest_resolution=False):
-    print("Downloading " + str(len(urls)) + " video(s).")
+    print("Downloading " + str(len(urls)) + " video(s) \nto " + os.getcwd() + ".")
     with ThreadPoolExecutor() as ex:
-        print_where_to_download()
         ex.map(download_video_from_url, urls, [
             only_audio for _ in range(len(urls))])
 
