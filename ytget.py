@@ -35,12 +35,9 @@ def main():
             "Download as audio? (y,n): ").strip().lower() == "y" else False
     else:
         link = sys.argv[1]
-        if "-vid" in sys.argv:
-            only_audio = False
-        if "-here" in sys.argv:
-            here = True
-        if "-show" in sys.argv:
-            show = True
+        only_audio = "-vid" not in sys.argv:
+        here = "-here" in sys.argv:
+        show = "-show" in sys.argv:
 
     # select where to put downloaded files
     downloaded_videos_folder = "Downloaded Videos"
